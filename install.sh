@@ -35,8 +35,8 @@ if [[ -z "$INTERNAL_OUTPUT" ]] || [[ -z "$EXTERNAL_OUTPUT" ]]; then
 fi
 
 POS=$(wlr-randr | awk -v out="$INTERNAL_OUTPUT" '$1==out {found=1} found && /Position:/ {print $2; exit}')
-MODE=$(wlr-randr | awk -v out="$INTERNAL_OUTPUT" '$1==out {found=1} found && /current/ {print $1 "@" $3;
-exit}')
+MODE=`wlr-randr | awk -v out="$INTERNAL_OUTPUT" '$1==out {found=1} found && /current/ {print $1 "@" $3 "Hz"; exit}'`
+
 
 POS="${POS:-1920,0}"
 MODE="${MODE:-1366x768@60Hz}"
@@ -62,7 +62,8 @@ cat << EOF > "$SCRIPT_TARGET"
 
 for _ in {1..50}; do
     if wlr-randr >/dev/null 2>&1; then
-        break:    fi
+        break
+    fi
     sleep 0.1
 done
 
